@@ -1,4 +1,4 @@
-# AI News Overview – Switzerland – February 4, 2025
+# Last Week in Swiss AI – February 4, 2025
 
 ## Table of Contents
 1. [Finance & Banking](#finance--banking)
