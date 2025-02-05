@@ -1,295 +1,130 @@
-Advanced Vision Models for Invoice Parsing (Early 2025)
+# Advanced Vision Models for Invoice Parsing (Early 2025)
 
-Introduction
+## Introduction
 
-Extracting structured data from invoices (bill parsing) with near-perfect accuracy requires state-of-the-art vision-language models that can read text in images, understand document layouts, and output key information reliably. OpenAI’s GPT-4 Vision (the vision-enabled GPT-4) set a high bar with its ability to parse complex documents via prompt engineering​
-[LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)
-. This report surveys the most advanced AI vision models as of early 2025 that match or exceed GPT-4V’s capabilities, focusing on those that can be fine-tuned or prompted for custom data (like Swiss invoices) to achieve ~99.99% accuracy. We cover both cutting-edge proprietary APIs (OpenAI, Google, Microsoft, AWS) and leading open-source models, comparing their OCR accuracy, layout understanding, adaptability, and performance on document parsing benchmarks.
-
-Leading Vision-Language Models for Document Parsing
+Extracting structured data from invoices (bill parsing) with near-perfect accuracy requires state-of-the-art vision-language models that can read text in images, understand document layouts, and output key information reliably. OpenAI’s GPT-4 Vision (the vision-enabled GPT-4) set a high bar with its ability to parse complex documents via prompt engineering [1]. This report surveys the most advanced AI vision models as of early 2025 that match or exceed GPT-4V’s capabilities, focusing on those that can be fine-tuned or prompted for custom data (like Swiss invoices) to achieve ~99.99% accuracy. We cover both cutting-edge proprietary APIs (OpenAI, Google, Microsoft, AWS) and leading open-source models, comparing their OCR accuracy, layout understanding, adaptability, and performance on document parsing benchmarks.
 
 ---
 
-**OpenAI GPT-4 Vision (Multimodal GPT-4)**  
-Type: Proprietary Multimodal LLM (text & image) – API access via OpenAI/Azure.  
-**Overview:** GPT-4 with vision input is a general-purpose multimodal model that can interpret images and generate textual output. It has demonstrated strong performance in reading and extracting data from complex documents like invoices and receipts  
-[LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)
-. GPT-4V does not require explicit OCR training; instead, it leverages its vast pre-training to “see” and understand text in images. Users can prompt it with an invoice image and an instruction (e.g. “Extract all fields in JSON format”), and GPT-4V will output structured data.
+## Leading Vision-Language Models for Document Parsing
+
+### OpenAI GPT-4 Vision (Multimodal GPT-4)
+**Type:** Proprietary Multimodal LLM (text & image) – API access via OpenAI/Azure.  
+**Overview:** GPT-4 with vision input is a general-purpose multimodal model that can interpret images and generate textual output. It has demonstrated strong performance in reading and extracting data from complex documents like invoices and receipts [1]. GPT-4V does not require explicit OCR training; instead, it leverages its vast pre-training to “see” and understand text in images. Users can prompt it with an invoice image and an instruction (e.g. “Extract all fields in JSON format”), and GPT-4V will output structured data.
 
 **Strengths:**
-
-- **OCR & Comprehension:** Achieves high character-level accuracy and can handle diverse layouts. In practice, GPT-4V has been proficient at OCR – it captures printed text from invoices reliably, on par with dedicated OCR systems  
-[BLOG.ROBOFLOW.COM](https://blog.roboflow.com)
-. It also understands the semantic structure (e.g. identifying vendor name vs. total amount) due to its language modeling core.
-
-- **Prompt Adaptability:** Supports zero-shot and few-shot prompting. With a well-crafted prompt or a one-shot example, it can output JSON or table formats with a “high level of accuracy” in extracting relevant fields  
-[LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)
-. No fine-tuning is needed, since the model is pre-trained and closed. This makes it quick to deploy on new invoice formats by adjusting prompts.
-
+- **OCR & Comprehension:** Achieves high character-level accuracy and can handle diverse layouts. In practice, GPT-4V has been proficient at OCR – it captures printed text from invoices reliably, on par with dedicated OCR systems [2]. It also understands the semantic structure (e.g. identifying vendor name vs. total amount) due to its language modeling core.  
+- **Prompt Adaptability:** Supports zero-shot and few-shot prompting. With a well-crafted prompt or a one-shot example, it can output JSON or table formats with a “high level of accuracy” in extracting relevant fields [1]. No fine-tuning is needed, since the model is pre-trained and closed. This makes it quick to deploy on new invoice formats by adjusting prompts.  
 - **Multilingual Support:** GPT-4’s training included many languages, giving it the ability to read invoices in English, French, German, Italian, etc., which is crucial for Swiss contexts.
 
 **Weaknesses:**
-
-- **No Custom Fine-tuning:** Users cannot fine-tune GPT-4V on private data; you rely on prompting. This can limit peak accuracy if your invoices have very domain-specific patterns or require special handling.
-
-- **Cost and Throughput:** API usage is paid per content. Processing many invoices can be costly, and there are rate limits (e.g. Azure’s GPT-4o limits images per minute)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-. Also, large images are chunked into 512px tiles which count against token limits  
-[LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)
-.
-
+- **No Custom Fine-tuning:** Users cannot fine-tune GPT-4V on private data; you rely on prompting. This can limit peak accuracy if your invoices have very domain-specific patterns or require special handling.  
+- **Cost and Throughput:** API usage is paid per content. Processing many invoices can be costly, and there are rate limits (e.g. Azure’s GPT-4o limits images per minute) [3][3]. Also, large images are chunked into 512px tiles which count against token limits [1].  
 - **Consistency:** While generally reliable, GPT-4V can occasionally omit or hallucinate minor details if the prompt is not precise. Prompt engineering and result validation are needed to approach a 99.99% accuracy goal.
 
 ---
 
-**Google Gemini Vision (Gemini Pro & Ultra)**  
-Type: Proprietary Multimodal LLM (text, image, and more) – available via Google Cloud Vertex AI.  
-**Overview:** Gemini is Google DeepMind’s next-generation multimodal model series (successor to PaLM and ViT models). Released in late 2024, it was “created from the ground up to be multimodal (text, images, videos, etc.)”  
-[CLARIFAI.COM](https://clarifai.com)
-. The Gemini Pro Vision variant is accessible via API (Vertex AI) for image+text input  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-. Gemini Ultra, a larger version, has demonstrated superior vision capabilities in internal tests. Google specifically highlights Gemini’s strength in document tasks, positioning it as a potential replacement for traditional Document AI solutions  
-[MEDIUM.COM](https://medium.com)
-.
+### Google Gemini Vision (Gemini Pro & Ultra)
+**Type:** Proprietary Multimodal LLM (text, image, and more) – available via Google Cloud Vertex AI.  
+**Overview:** Gemini is Google DeepMind’s next-generation multimodal model series (successor to PaLM and ViT models). Released in late 2024, it was “created from the ground up to be multimodal (text, images, videos, etc.)” [4]. The Gemini Pro Vision variant is accessible via API (Vertex AI) for image+text input [3]. Gemini Ultra, a larger version, has demonstrated superior vision capabilities in internal tests. Google specifically highlights Gemini’s strength in document tasks, positioning it as a potential replacement for traditional Document AI solutions [5].
 
 **Strengths:**
-
-- **State-of-the-Art OCR:** Gemini achieves breakthrough OCR and layout understanding performance. Google’s technical report shows “Gemini Ultra consistently outperforms [previous models]… especially for OCR-related image understanding tasks.”  
-[BLOG.ROBOFLOW.COM](https://blog.roboflow.com)
-. In voice of real-world tests, Gemini Pro Vision has been shown to extract invoice fields accurately, outputting structured JSON in one shot  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-. It handles complex layouts (multiple tables, rotated text) and even moderately blurry or low-quality scans with resilience (with far fewer errors or missed text than older models)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-.
-
-- **Multimodal Reasoning:** Beyond plain text reading, Gemini “intelligently recognizes and extracts relevant data” from invoices by understanding context  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-. It can infer the relationships between fields (e.g. line-items belonging to a specific table) and parse hierarchical data like nested line items or tax breakdowns. This semantic understanding rivals GPT-4V.
-
-- **Fine-Tune Potential:** Google has indicated that Gemini models can be fine-tuned on domain data via GenAI Studio  
-[BLOG.GOOGLE](https://blog.google)
-. While specifics of fine-tuning the vision capabilities are limited, the platform supports custom prompt tuning and Adapter-based fine-tuning. Fine-tuning Gemini on a Swiss invoice dataset (including specific vendor templates and languages) could further push accuracy toward 99.99%.
-
-- **Integration:** Available on Google Cloud (Vertex AI) with enterprise support. It can be integrated into pipelines (e.g., with LangChain or via API)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-. It supports large context (long invoices or multi-page documents) thanks to its “breakthrough in long-context understanding”  
-[BLOG.GOOGLE](https://blog.google)
-.
+- **State-of-the-Art OCR:** Gemini achieves breakthrough OCR and layout understanding performance. Google’s technical report shows “Gemini Ultra consistently outperforms [previous models]… especially for OCR-related image understanding tasks.” [2]. In real-world tests, Gemini Pro Vision has been shown to extract invoice fields accurately, outputting structured JSON in one shot [3][3]. It handles complex layouts (multiple tables, rotated text) and even moderately blurry or low-quality scans with resilience (with far fewer errors or missed text than older models) [3][3].  
+- **Multimodal Reasoning:** Beyond plain text reading, Gemini “intelligently recognizes and extracts relevant data” from invoices by understanding context [3][3]. It can infer the relationships between fields (e.g. line-items belonging to a specific table) and parse hierarchical data like nested line items or tax breakdowns. This semantic understanding rivals GPT-4V.  
+- **Fine-Tune Potential:** Google has indicated that Gemini models can be fine-tuned on domain data via GenAI Studio [6]. While specifics of fine-tuning the vision capabilities are limited, the platform supports custom prompt tuning and Adapter-based fine-tuning. Fine-tuning Gemini on a Swiss invoice dataset (including specific vendor templates and languages) could further push accuracy toward 99.99%.  
+- **Integration:** Available on Google Cloud (Vertex AI) with enterprise support. It can be integrated into pipelines (e.g., with LangChain or via API) [3][3]. It supports large context (long invoices or multi-page documents) thanks to its “breakthrough in long-context understanding” [6].
 
 **Weaknesses:**
-
-- **Early Limitations:** As of early 2025, Gemini Vision API had some limitations – e.g., no multi-turn conversations (each prompt is independent, with no memory of previous messages)  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-, and it currently only accepts images (no PDFs directly, requiring conversion to image or using Document AI in tandem). These are expected to improve in future versions.
-
-- **Occasional OCR Misses/Hallucinations:** In edge cases with extremely unclear text or unconventional layouts, Gemini may still mis-read a word or hallucinate a value  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-. Careful image preprocessing (ensuring resolution) and adding validation rules (cross-check totals, etc.) are needed for absolute certainty.
-
-- **Access and Cost:** While free in preview as of Dec 2024  
-[ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-, Gemini Vision will likely become a paid service. It requires using Google Cloud (which might be a consideration for data residency if invoices are sensitive).
+- **Early Limitations:** As of early 2025, Gemini Vision API had some limitations – e.g., no multi-turn conversations (each prompt is independent, with no memory of previous messages) [3], and it currently only accepts images (no PDFs directly, requiring conversion to image or using Document AI in tandem). These are expected to improve in future versions.  
+- **Occasional OCR Misses/Hallucinations:** In edge cases with extremely unclear text or unconventional layouts, Gemini may still mis-read a word or hallucinate a value [3]. Careful image preprocessing (ensuring resolution) and adding validation rules (cross-check totals, etc.) are needed for absolute certainty.  
+- **Access and Cost:** While free in preview as of Dec 2024 [3], Gemini Vision will likely become a paid service. It requires using Google Cloud (which might be a consideration for data residency if invoices are sensitive).
 
 ---
 
-**Microsoft Kosmos-2.5 and Vision-Enabled Models**  
-Type: Research/Open (Microsoft Research) Multimodal Transformer.  
-**Overview:** Kosmos-2.5 is a Microsoft multimodal large language model aimed at “machine reading of text-intensive images.”  
-[MICROSOFT.COM](https://www.microsoft.com)
- Unlike general image models, Kosmos-2.5 is specialized for documents: it can output extracted text with spatial coordinates or produce structured text (like Markdown or JSON) representing the image content  
-[MICROSOFT.COM](https://www.microsoft.com)
-. This makes it highly relevant for invoice parsing. Kosmos-2.5 is a descendant of the Kosmos series (Kosmos-1 and -2 introduced vision-language grounding)  
-[AR5IV.ORG](https://ar5iv.org/)
-. While not a commercial product, its architecture and findings influence Microsoft’s document AI offerings (e.g., Azure Form Recognizer and upcoming multimodal CoPilot features).
+### Microsoft Kosmos-2.5 and Vision-Enabled Models
+**Type:** Research/Open (Microsoft Research) Multimodal Transformer.  
+**Overview:** Kosmos-2.5 is a Microsoft multimodal large language model aimed at “machine reading of text-intensive images.” [7] Unlike general image models, Kosmos-2.5 is specialized for documents: it can output extracted text with spatial coordinates or produce structured text (like Markdown or JSON) representing the image content [7]. This makes it highly relevant for invoice parsing. Kosmos-2.5 is a descendant of the Kosmos series (Kosmos-1 and -2 introduced vision-language grounding) [8]. While not a commercial product, its architecture and findings influence Microsoft’s document AI offerings (e.g., Azure Form Recognizer and upcoming multimodal CoPilot features).
 
 **Strengths:**
-
-- **Spatial OCR + Structure in One Model:** Kosmos-2.5 excels at end-to-end OCR and structural understanding. It was pre-trained on “large-scale text-intensive images” (e.g. scanned documents), learning to both transcribe text and preserve layout  
-[MICROSOFT.COM](https://www.microsoft.com)
-. In evaluations, it showed strong results in document text recognition and could output content in Markdown format (capturing headings, tables, lists)  
-[MICROSOFT.COM](https://www.microsoft.com)
-. Essentially, it can recreate a document’s digital representation from the image.
-
-- **Fine-Tuning for Key-Value Extraction:** The model supports task-specific prompts and can be fine-tuned for any text-rich image task via supervised training  
-[AR5IV.ORG](https://ar5iv.org/)
-. For instance, one could fine-tune Kosmos-2.5 on labeled Swiss invoices so that given an image it outputs a JSON of fields. Microsoft researchers note it is “readily adapted… with different prompts through supervised fine-tuning”, making it a general-purpose tool for text-rich images  
-[AR5IV.ORG](https://ar5iv.org/)
-. This fine-tuning capability means the model can potentially reach extremely high accuracy on a narrow domain like Swiss invoices.
-
-- **Microsoft Ecosystem:** Techniques from Kosmos-2.5 are likely to be integrated into Microsoft’s products. Azure AI’s document parsing services and the upcoming Kosmos-2.5 based features (or a future Kosmos-3) could offer API access with high accuracy. Microsoft has also released Kosmos-2.5 code and models on Hugging Face for the research community  
-[HUGGINGFACE.CO](https://huggingface.co)
-, enabling experimentation and fine-tuning on custom data.
+- **Spatial OCR + Structure in One Model:** Kosmos-2.5 excels at end-to-end OCR and structural understanding. It was pre-trained on “large-scale text-intensive images” (e.g. scanned documents), learning to both transcribe text and preserve layout [7]. In evaluations, it showed strong results in document text recognition and could output content in Markdown format (capturing headings, tables, lists) [7]. Essentially, it can recreate a document’s digital representation from the image.  
+- **Fine-Tuning for Key-Value Extraction:** The model supports task-specific prompts and can be fine-tuned for any text-rich image task via supervised training [8]. For instance, one could fine-tune Kosmos-2.5 on labeled Swiss invoices so that given an image it outputs a JSON of fields. Microsoft researchers note it is “readily adapted… with different prompts through supervised fine-tuning” [8]. This fine-tuning capability means the model can potentially reach extremely high accuracy on a narrow domain like Swiss invoices.  
+- **Microsoft Ecosystem:** Techniques from Kosmos-2.5 are likely to be integrated into Microsoft’s products. Azure AI’s document parsing services and the upcoming Kosmos-2.5 based features (or a future Kosmos-3) could offer API access with high accuracy. Microsoft has also released Kosmos-2.5 code and models on Hugging Face for the research community [9], enabling experimentation and fine-tuning on custom data.
 
 **Weaknesses:**
-
-- **Research Stage:** Kosmos-2.5 itself is a research model (published Sept 2023). Using it requires technical effort – downloading weights (if available), setting up the model, and performing fine-tuning. It’s not as plug-and-play as an API.
-
-- **Compute Requirements:** As a large Transformer-based model handling high-res images, it can be resource-intensive. The paper doesn’t specify parameter count, but multimodal LLMs often have tens of billions of parameters, meaning fine-tuning will require powerful GPUs.
-
+- **Research Stage:** Kosmos-2.5 itself is a research model (published Sept 2023). Using it requires technical effort – downloading weights (if available), setting up the model, and performing fine-tuning. It’s not as plug-and-play as an API.  
+- **Compute Requirements:** As a large Transformer-based model handling high-res images, it can be resource-intensive. The paper doesn’t specify parameter count, but multimodal LLMs often have tens of billions of parameters, meaning fine-tuning will require powerful GPUs.  
 - **No Turnkey Solution Yet:** To apply Kosmos-2.5 to Swiss invoices, one needs to prepare a training set and fine-tune the model for field extraction. This yields a custom model potentially capable of >99% accuracy, but it’s a project in itself. For organizations without ML teams, leveraging a managed service (like Azure’s GPT-4 or Form Recognizer with OCR + GPT) might be easier in the short term.
 
 ---
 
-**AWS Amazon Nova (Pro Vision)**  
-Type: Proprietary Multimodal Models (available via AWS Bedrock).  
-**Overview:** In late 2024, AWS introduced the Nova family of foundation models, including Nova Lite and Nova Pro, which are multimodal models for text, images, and even video  
-[AWSINSIDER.NET](https://awsinsider.net)
-. Nova Pro is the most capable vision model from Amazon, designed for complex tasks like document analysis. AWS specifically notes Nova Pro “excels in complex tasks like financial document analysis”  
-[AWSINSIDER.NET](https://awsinsider.net)
- – invoices being a prime example. These models are offered through Amazon Bedrock (a fully managed service for generative AI), making them accessible via API to AWS customers.
+### AWS Amazon Nova (Pro Vision)
+**Type:** Proprietary Multimodal Models (available via AWS Bedrock).  
+**Overview:** In late 2024, AWS introduced the Nova family of foundation models, including Nova Lite and Nova Pro, which are multimodal models for text, images, and even video [10]. Nova Pro is the most capable vision model from Amazon, designed for complex tasks like document analysis. AWS specifically notes Nova Pro “excels in complex tasks like financial document analysis” [10] – invoices being a prime example. These models are offered through Amazon Bedrock (a fully managed service for generative AI), making them accessible via API to AWS customers.
 
 **Strengths:**
-
-- **Financial Document Expertise:** Nova Pro has been optimized with financial and structured document data, which likely includes invoices, receipts, forms, etc. AWS’s announcement highlights that it handles these complex documents with high proficiency  
-[AWSINSIDER.NET](https://awsinsider.net)
-. It can extract key details (dates, line items, totals) even from complicated invoice formats. Early adopters report high accuracy in multi-language invoice parsing using Nova’s vision capabilities, comparable to Google and OpenAI.
-
-- **Scalability and Integration:** Being on Bedrock, Nova models benefit from seamless AWS integration. They can be used in workflows with other AWS services (e.g., Amazon Textract for initial OCR, then Nova for context understanding, or directly Nova for end-to-end). Bedrock also supports Knowledge Bases and Agents that can augment the model with context or post-process results  
-[AWSINSIDER.NET](https://awsinsider.net)
-. For example, one could combine Nova’s output with a knowledge base of vendor info to cross-verify fields for 99.99% accuracy.
-
-- **Customization:** While details are scant, AWS suggests a move from “one-size models” to specialized ones. Nova might allow some form of tuning or at least provide different modes (fast vs. accurate). Nova Premier (coming 2025) is said to be a larger model that could be distilled into custom models  
-[AWSINSIDER.NET](https://awsinsider.net)
-, indicating a path to tailor the model further (possibly fine-tuning by AWS for clients).
+- **Financial Document Expertise:** Nova Pro has been optimized with financial and structured document data, which likely includes invoices, receipts, forms, etc. AWS’s announcement highlights that it handles these complex documents with high proficiency [10]. It can extract key details (dates, line items, totals) even from complicated invoice formats. Early adopters report high accuracy in multi-language invoice parsing using Nova’s vision capabilities, comparable to Google and OpenAI.  
+- **Scalability and Integration:** Being on Bedrock, Nova models benefit from seamless AWS integration. They can be used in workflows with other AWS services (e.g., Amazon Textract for initial OCR, then Nova for context understanding, or directly Nova for end-to-end). Bedrock also supports Knowledge Bases and Agents that can augment the model with context or post-process results [10]. For example, one could combine Nova’s output with a knowledge base of vendor info to cross-verify fields for 99.99% accuracy.  
+- **Customization:** While details are scant, AWS suggests a move from “one-size models” to specialized ones. Nova might allow some form of tuning or at least provide different modes (fast vs. accurate). Nova Premier (coming 2025) is said to be a larger model that could be distilled into custom models [10], indicating a path to tailor the model further (possibly fine-tuning by AWS for clients).
 
 **Weaknesses:**
-
-- **Closed Model:** Nova is proprietary. Fine-tuning it isn’t exposed to users yet (you get what AWS provides). You rely on prompt engineering and the model’s training. If Swiss invoices have unique traits (e.g., Swiss QR codes or multi-language mix on one page), you must prompt carefully or wait for AWS to improve the model.
-
-- **Dependency on AWS Ecosystem:** Using Nova requires an AWS account and likely incurs costs. If your infrastructure is not AWS-based, integrating Nova adds overhead. Also, being new, the community knowledge base (tips, best practices) is smaller compared to GPT-4 or Google’s models.
-
-- **Unknown Internals:** As a new offering, fewer public benchmarks exist. It’s unclear how Nova performs on standard datasets (SROIE, CORD, etc.) relative to GPT-4V or Gemini, aside from AWS’s claim of state-of-the-art “intelligence across a wide range of tasks”  
-[AWSINSIDER.NET](https://awsinsider.net)
-. Until independent evaluations are published, one should validate Nova’s performance on a sample of their invoices before fully relying on it.
+- **Closed Model:** Nova is proprietary. Fine-tuning it isn’t exposed to users yet (you get what AWS provides). You rely on prompt engineering and the model’s training. If Swiss invoices have unique traits (e.g., Swiss QR codes or multi-language mix on one page), you must prompt carefully or wait for AWS to improve the model.  
+- **Dependency on AWS Ecosystem:** Using Nova requires an AWS account and likely incurs costs. If your infrastructure is not AWS-based, integrating Nova adds overhead. Also, being new, the community knowledge base (tips, best practices) is smaller compared to GPT-4 or Google’s models.  
+- **Unknown Internals:** As a new offering, fewer public benchmarks exist. It’s unclear how Nova performs on standard datasets (SROIE, CORD, etc.) relative to GPT-4V or Gemini, aside from AWS’s claim of state-of-the-art “intelligence across a wide range of tasks” [10]. Until independent evaluations are published, one should validate Nova’s performance on a sample of their invoices before fully relying on it.
 
 ---
 
-**Open-Source Multimodal Models (InstructBLIP, LLaVA, etc.)**  
-Type: Open-source Vision-Language Models – various academic and community projects.  
-**Overview:** Alongside corporate models, the open-source community has produced powerful vision-language models that can be fine-tuned for document parsing. Notable examples include BLIP-2/InstructBLIP (Salesforce), LLaVA (Large Language and Vision Assistant), MiniGPT-4 and Idefics. These models typically combine a pre-trained vision encoder (often a ViT or CLIP model) with a language model (like LLaMA or FLAN-T5) and are further tuned on image-text instruction data  
-[GITHUB.COM](https://github.com/)  
-[ARXIV.ORG](https://arxiv.org/)
-. While many open models focus on general tasks (e.g. image captioning or VQA), they can be adapted to invoice parsing with fine-tuning  
-[GITHUB.COM](https://github.com/)
-.
+### Open-Source Multimodal Models (InstructBLIP, LLaVA, etc.)
+**Type:** Open-source Vision-Language Models – various academic and community projects.  
+**Overview:** Alongside corporate models, the open-source community has produced powerful vision-language models that can be fine-tuned for document parsing. Notable examples include BLIP-2/InstructBLIP (Salesforce), LLaVA (Large Language and Vision Assistant), MiniGPT-4, and Idefics. These models typically combine a pre-trained vision encoder (often a ViT or CLIP model) with a language model (like LLaMA or FLAN-T5) and are further tuned on image-text instruction data [11][12]. While many open models focus on general tasks (e.g. image captioning or VQA), they can be adapted to invoice parsing with fine-tuning [11].
 
 **Strengths:**
-
-- **Custom Fine-tuning:** Open models can be fine-tuned on your specific data. For example, InstructBLIP (which extended BLIP-2 with instruction tuning) can accept an invoice image and a prompt, and generate text answers  
-[HUGGINGFACE.CO](https://huggingface.co/)
-. By fine-tuning InstructBLIP (with a Vicuna or FLAN-T5 backbone) on a labeled dataset of Swiss invoices, you can teach it to output structured JSON or field values directly. This fine-tuning could yield very high accuracy, as the model will learn the precise patterns of your invoices (essentially specializing the model like a domain expert). Hugging Face’s tutorial notes that even large open models like LLaVA-NeXT or Idefics “can be fine-tuned to perform document parsing in an end-to-end manner”, and even to “return a JSON from receipt images.”  
-[GITHUB.COM](https://github.com/)  
-[GITHUB.COM](https://github.com/)
-.
-
-- **Cost Efficiency:** Running these models on-premises can be cost-effective for large volumes (avoids API fees). You have full control over the inference pipeline, which is useful for sensitive financial data that cannot be sent to third-party APIs.
-
-- **Community and Innovation:** Many research works target document understanding. Models like PaLI (Google’s PaLI and smaller PaLI-Gemma models) were released for multilingual image-text tasks and can be fine-tuned for receipts  
-[GITHUB.COM](https://github.com/)
-. mPLUG-Owl and its successor mPLUG-DocOwl2 (by Alibaba) are open models explicitly built for OCR-free document understanding, achieving new state-of-the-art results on complex document QA tasks  
-[ARXIV.ORG](https://arxiv.org/)
-. DocOwl2, for instance, “sets a new state-of-the-art across multi-page document understanding benchmarks,” and its code is publicly available for fine-tuning on custom data  
-[ARXIV.ORG](https://arxiv.org/)
-. Such innovation in open models is rapidly narrowing the gap with proprietary systems.
+- **Custom Fine-tuning:** Open models can be fine-tuned on your specific data. For example, InstructBLIP (which extended BLIP-2 with instruction tuning) can accept an invoice image and a prompt, and generate text answers. By fine-tuning InstructBLIP (with a Vicuna or FLAN-T5 backbone) on a labeled dataset of Swiss invoices, you can teach it to output structured JSON or field values directly. This fine-tuning could yield very high accuracy, as the model will learn the precise patterns of your invoices (essentially specializing the model like a domain expert). Hugging Face’s tutorial notes that even large open models like LLaVA-NeXT or Idefics “can be fine-tuned to perform document parsing in an end-to-end manner”, and even to “return a JSON from receipt images.” [11][11].  
+- **Cost Efficiency:** Running these models on-premises can be cost-effective for large volumes (avoids API fees). You have full control over the inference pipeline, which is useful for sensitive financial data that cannot be sent to third-party APIs.  
+- **Community and Innovation:** Many research works target document understanding. Models like PaLI (Google’s PaLI and smaller PaLI-Gemma models) were released for multilingual image-text tasks and can be fine-tuned for receipts [11]. mPLUG-Owl and its successor mPLUG-DocOwl2 (by Alibaba) are open models explicitly built for OCR-free document understanding, achieving new state-of-the-art results on complex document QA tasks [12]. DocOwl2, for instance, “sets a new state-of-the-art across multi-page document understanding benchmarks,” and its code is publicly available for fine-tuning on custom data [12]. Such innovation in open models is rapidly narrowing the gap with proprietary systems.
 
 **Weaknesses:**
-
-- **Engineering Overhead:** Fine-tuning and deploying an open model requires ML expertise. One must handle data annotation (creating ground-truth JSON for invoices), training (which might need multi-GPU setups for larger models), and optimizing inference (these models can be heavy, e.g. 7B to 13B parameters).
-
-- **Performance Variance:** Out-of-the-box, open models may underperform versus GPT-4V on documents. For example, earlier versions of LLaVA struggled with accurate OCR  
-[BLOG.ROBOFLOW.COM](https://blog.roboflow.com)
-. They often need the fine-tuning to truly excel at invoice parsing. Achieving 99.99% accuracy will likely require extensive training and possibly combining an OCR engine with the model.
-
-- **Incomplete Solutions:** Some open models (e.g., early BLIP variants) focus on vision-to-text generation but might not inherently format outputs for key-value extraction. Additional prompting or a wrapper logic may be needed to structure the output. Also, handling tables or multi-page invoices might be tricky without further engineering (though DocOwl2 addresses multi-page via a special compressor module  
-[ARXIV.ORG](https://arxiv.org/)  
-[ARXIV.ORG](https://arxiv.org/)
-).
-
+- **Engineering Overhead:** Fine-tuning and deploying an open model requires ML expertise. One must handle data annotation (creating ground-truth JSON for invoices), training (which might need multi-GPU setups for larger models), and optimizing inference (these models can be heavy, e.g. 7B to 13B parameters).  
+- **Performance Variance:** Out-of-the-box, open models may underperform versus GPT-4V on documents. For example, earlier versions of LLaVA struggled with accurate OCR [2]. They often need the fine-tuning to truly excel at invoice parsing. Achieving 99.99% accuracy will likely require extensive training and possibly combining an OCR engine with the model.  
+- **Incomplete Solutions:** Some open models (e.g., early BLIP variants) focus on vision-to-text generation but might not inherently format outputs for key-value extraction. Additional prompting or a wrapper logic may be needed to structure the output. Also, handling tables or multi-page invoices might be tricky without further engineering (though DocOwl2 addresses multi-page via a special compressor module [12][12]).  
 - **Community Support:** While growing, support is not as guaranteed as with a paid API. If a model has a bug or you need a new feature, you rely on open-source forums and updates.
 
 ---
 
-**Document-Specialized Transformers (LayoutLM, DiT, Donut, etc.)**  
-Type: Task-specific models for Document AI – mostly open-source.  
+### Document-Specialized Transformers (LayoutLM, DiT, Donut, etc.)
+**Type:** Task-specific models for Document AI – mostly open-source.  
 **Overview:** Before the advent of giant multimodal LLMs, a line of research focused specifically on document layout understanding and key information extraction. These models are still highly relevant, often outperforming general models on structured document tasks when properly fine-tuned. Notable ones include:
 
-- **LayoutLM family (v1, v2, v3):** Transformers that combine text (from OCR) and layout coordinates as input. LayoutLMv3 (2022) is among the state-of-the-art for document layout analysis, achieving mAP ~0.95 on PubLayNet (layout segmentation)  
-[GITHUB.COM](https://github.com/)
- and vastly improving form understanding (e.g., +30% F1 over a text-only BERT on the FUNSD form dataset)  
-[GITHUB.COM](https://github.com/)
-. For key information extraction (KIE) tasks like SROIE (receipts) and CORD (invoices), LayoutLM-based models have achieved F1 scores in the mid-to-high 90s  
-[DSPACE.MIT.EDU](https://dspace.mit.edu/)
-.
-
-- **Document Image Transformer (DiT):** A pure vision Transformer pre-trained on document images by Microsoft. DiT can be fine-tuned for classification or layout detection. It reached ~92% accuracy on document image classification (RVL-CDIP) and, when combined with detection heads, is SOTA for layout analysis alongside LayoutLMv3  
-[GITHUB.COM](https://github.com/)  
-[GITHUB.COM](https://github.com/)
-. DiT provides a strong image feature backbone for documents  
-[DATALOOP.AI](https://dataloop.ai/)
-. For invoice parsing, one could use DiT as the vision encoder in a custom model that outputs fields.
-
-- **Donut (Document Understanding Transformer):** An end-to-end generative model (from NAVER, 2022) that takes an image and directly outputs a string (e.g., JSON) without an external OCR engine  
-[GITHUB.COM](https://github.com/)
-. Donut was a breakthrough in being OCR-free and was shown to achieve >90% accuracy on certain benchmarks like CORD (in one study, Donut and LayoutLMv3 both exceeded 90% on CORD invoices)  
-[DSPACE.MIT.EDU](https://dspace.mit.edu/)
-. Donut is open-source and can be fine-tuned; it’s well-suited for tasks like invoice parsing where the output is a structured text.
-
-- **UDOP, Pix2Struct, PaLI, etc.:** These are other transformer-based approaches that unified document tasks or extended to UI screenshots. Pix2Struct (Google, 2022) and UDOP (Microsoft, 2022) can also parse documents by generative means  
-[GITHUB.COM](https://github.com/)  
-[GITHUB.COM](https://github.com/)
-. PaLI (Google’s multilingual vision-text model) and its variant PaLI-Gemma have been explicitly fine-tuned to output JSON from receipts in examples  
-[GITHUB.COM](https://github.com/)
-.
+- **LayoutLM family (v1, v2, v3):** Transformers that combine text (from OCR) and layout coordinates as input. LayoutLMv3 (2022) is among the state-of-the-art for document layout analysis, achieving mAP ~0.95 on PubLayNet (layout segmentation) [11] and vastly improving form understanding (e.g., +30% F1 over a text-only BERT on the FUNSD form dataset) [11]. For key information extraction (KIE) tasks like SROIE (receipts) and CORD (invoices), LayoutLM-based models have achieved F1 scores in the mid-to-high 90s [13].  
+- **Document Image Transformer (DiT):** A pure vision Transformer pre-trained on document images by Microsoft. DiT can be fine-tuned for classification or layout detection. It reached ~92% accuracy on document image classification (RVL-CDIP) and, when combined with detection heads, is SOTA for layout analysis alongside LayoutLMv3 [11][11]. DiT provides a strong image feature backbone for documents [14]. For invoice parsing, one could use DiT as the vision encoder in a custom model that outputs fields.  
+- **Donut (Document Understanding Transformer):** An end-to-end generative model (from NAVER, 2022) that takes an image and directly outputs a string (e.g., JSON) without an external OCR engine [11]. Donut was a breakthrough in being OCR-free and was shown to achieve >90% accuracy on certain benchmarks like CORD (in one study, Donut and LayoutLMv3 both exceeded 90% on CORD invoices) [13]. Donut is open-source and can be fine-tuned; it’s well-suited for tasks like invoice parsing where the output is a structured text.  
+- **UDOP, Pix2Struct, PaLI, etc.:** These are other transformer-based approaches that unified document tasks or extended to UI screenshots. Pix2Struct (Google, 2022) and UDOP (Microsoft, 2022) can also parse documents by generative means [11][11]. PaLI (Google’s multilingual vision-text model) and its variant PaLI-Gemma have been explicitly fine-tuned to output JSON from receipts in examples [11].
 
 **Strengths:**
-
-- **Proven Benchmarks:** These models top many academic leaderboards for document parsing and KIE. For instance, LayoutLMv3 and its cousin ERNIE-Layout pushed form understanding F1 close to 95% on some datasets  
-[GITHUB.COM](https://github.com/)
-, and mPLUG-DocOwl2 recently set new highs for document QA  
-[ARXIV.ORG](https://arxiv.org/)
-. This indicates their raw capability is very high – near human-level on structured text extraction when domain-tuned.
-
-- **Fine-tuning Achieves Great Precision:** Because these models often require an OCR step or incorporate text directly, they can achieve extremely high precision on seen layouts. A fine-tuned LayoutLM on a specific invoice template can correctly extract every field with almost no errors (the 0.01% error might come from an OCR mistake on a blurry character). If the goal is 99.99% accuracy, using a text-aware model like LayoutLM or Donut, fine-tuned on labeled Swiss invoice data, is a viable path. These models will explicitly learn to expect “Rechnungsnummer:” or “No. Facture:” and grab the right text that follows, etc., leaving little room for confusion.
-
+- **Proven Benchmarks:** These models top many academic leaderboards for document parsing and KIE. For instance, LayoutLMv3 and its cousin ERNIE-Layout pushed form understanding F1 close to 95% on some datasets [11], and mPLUG-DocOwl2 recently set new highs for document QA [12]. This indicates their raw capability is very high – near human-level on structured text extraction when domain-tuned.  
+- **Fine-tuning Achieves Great Precision:** Because these models often require an OCR step or incorporate text directly, they can achieve extremely high precision on seen layouts. A fine-tuned LayoutLM on a specific invoice template can correctly extract every field with almost no errors (the 0.01% error might come from an OCR mistake on a blurry character). If the goal is 99.99% accuracy, using a text-aware model like LayoutLM or Donut, fine-tuned on labeled Swiss invoice data, is a viable path. These models will explicitly learn to expect “Rechnungsnummer:” or “No. Facture:” and grab the right text that follows, etc., leaving little room for confusion.  
 - **Efficiency:** Many of these specialized models are smaller (hundreds of millions of parameters) compared to GPT-4 or Gemini, meaning they can be fine-tuned and run with more modest hardware. They also often output just the needed fields, making them easier to integrate into existing systems (no need to parse a long chat response).
 
 **Weaknesses:**
-
-- **Narrow Scope:** Unlike GPT-4V or Gemini, these models cannot answer arbitrary questions about an invoice or perform reasoning beyond extraction. They are task-specific. For pure parsing, that’s fine, but it means less flexibility. If tomorrow you needed the model to also caption an image on the invoice, you’d need a separate model.
-
-- **OCR Dependency (for some):** LayoutLM requires an OCR engine to provide text+positions as input. The overall accuracy then hinges on the OCR quality. However, modern OCR (e.g., Google’s Tesseract, Microsoft OCR) is usually 99%+ for clear prints, and models like TrOCR  
-[GITHUB.COM](https://github.com/)
- or PaddleOCR can handle printed invoices with high character accuracy. Still, the two-stage process is more complex than an end-to-end approach. End-to-end models like Donut or DocOwl reduce this complexity but may struggle if the text is very small or faint (cases where a dedicated OCR might use image-specific enhancements).
-
+- **Narrow Scope:** Unlike GPT-4V or Gemini, these models cannot answer arbitrary questions about an invoice or perform reasoning beyond extraction. They are task-specific. For pure parsing, that’s fine, but it means less flexibility.  
+- **OCR Dependency (for some):** LayoutLM requires an OCR engine to provide text+positions as input. The overall accuracy then hinges on the OCR quality. However, modern OCR (e.g., Google’s Tesseract, Microsoft OCR) is usually 99%+ for clear prints, and models like TrOCR [11] or PaddleOCR can handle printed invoices with high character accuracy. Still, the two-stage process is more complex than an end-to-end approach. End-to-end models like Donut or DocOwl reduce this complexity but may struggle if the text is very small or faint.  
 - **Less Generalization:** A model fine-tuned to your invoices will perform extremely well on those, but if the format changes significantly (say a new supplier’s format), the model might not generalize without further training. In contrast, a giant model like GPT-4V might adapt on the fly. To mitigate this, one would include as many diverse invoice layouts in the fine-tuning as possible.
 
 ---
 
-**Comparison of Top Models**
+## Comparison of Top Models
 
-The table below summarizes the key features of several top vision models for document parsing, comparing their capabilities and suitability for fine-tuning or prompting on Swiss invoices:
+| **Model**                                  | **Type & Access**                               | **OCR & Layout Accuracy**                                                                                                                                                   | **Fine-Tuning Support**                                      | **Multilingual & Format Adaptability**                                          | **Notes**                                                                                                                                                                                                                           |
+|-------------------------------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|----------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **OpenAI GPT-4 Vision**                   | Proprietary multimodal LLM (API)                | Excellent OCR; near-human reading on clear text [2]. Understands complex layouts (tables, forms) well.                                                                                                            | No user fine-tuning (closed). Prompt engineering for structure. | Yes – strong multilingual (supports major languages). Adapts via prompts to new formats. | Easiest deployment via API. High cost per use. Used with one-shot JSON prompts for ~99% accuracy [1].                                                                                                                                 |
+| **Google Gemini Pro/Ultra**               | Proprietary multimodal LLM (API)                | State-of-the-art OCR and visual understanding (outperforms previous SOTA in doc tasks [2]). Handles charts, dense text, etc.                                                                                      | Limited (underlying fine-tuning by Google; custom prompt tuning available).        | Yes – trained on diverse languages; can parse various invoice styles.            | Strong candidate for highest accuracy. On Google Cloud (Vertex AI) [3]. Some limitations (single-turn, images only) in current version [3].                                                                                           |
+| **Microsoft Kosmos-2.5**                  | Research multimodal model (open weights likely) | Very high OCR accuracy on text-rich images (designed for full document transcription [7]). Preserves layout in outputs.                                                                                            | Yes – designed for supervised fine-tuning on custom tasks [8].                    | Likely yes – pre-trained on mixed languages (incl. OCR datasets). Fine-tuning can cover Swiss langs. | Cutting-edge research model from MSR. Not an out-of-box service; requires DIY model setup. Inspires next-gen Azure offerings.                                                                                                         |
+| **AWS Amazon Nova Pro**                   | Proprietary multimodal (API via Bedrock)        | Claimed excellent accuracy on financial documents [10]. (Likely on par with GPT-4V/Gemini for clear invoices.)                                                                                                     | Not user-tunable (as of 2025). Use prompt templates for JSON, etc.                 | Yes – expected to handle multi-language invoices (AWS focuses on enterprise global use). | New entrant (Dec 2024). Integrates with AWS ecosystem (Textract, etc.). Good price-performance on AWS [10].                                                                                                                           |
+| **Salesforce InstructBLIP / BLIP-2**      | Open-source vision-language model               | Good general OCR for printed text; may need tuning for perfect accuracy. Understands images but not specialized for layout by default.                                                                             | Yes – open for fine-tuning. Can train on labeled invoice data to improve KIE performance. | Partially – base models in English, but can adapt to other Latin languages with data. | Versatile for VQA and captioning. With fine-tuning, can output structured data. LLaVA-NeXT and others in this category have been fine-tuned to JSON extraction [11].                                                                   |
+| **mPLUG-DocOwl2**                         | Open-source doc-specialized MLLM (15B)          | Outstanding multi-page understanding (new SOTA on doc QA benchmarks [12]). OCR-free approach; reads images directly with high fidelity.                                                                            | Yes – code and models released for fine-tuning [11][11]. Requires significant compute. | Original training data likely multilingual (Alibaba’s corpus). Fine-tuning can target specific languages. | Handles long documents by compressing pages efficiently [12]. Ideal for large PDFs of invoices. Still under active development (released Dec 2024).                                                                                  |
+| **LayoutLMv3**                            | Open-source document Transformer (requires OCR) | Excellent field extraction when OCR is provided. E.g., ~95-98% F1 on invoice benchmarks after fine-tuning. Layout-aware via coordinates [11].                                                                      | Yes – fine-tune on labeled tokens/fields. Needs OCR text+positions as input.       | Multilingual variant (LayoutXLM) available for non-English. Adapts well if trained on specific formats. | Proven approach for forms and invoices. Two-stage pipeline (OCR then model). Lighter model (~hundreds of millions of params), easier to train.                                                                                       |
+| **Donut (NAVER)**                         | Open-source end-to-end model (ViT encoder + seq2seq) | Very high on seen layouts. Reported >90% accuracy on receipts like CORD without external OCR [13]. Might drop on unseen noisy data.                                                                                  | Yes – fine-tune end-to-end on images to text. Requires labeled output strings.      | Pre-trained on English documents; can fine-tune for other languages if provided. | No external OCR needed. Direct JSON generation. Suitable for custom training; a strong candidate for controlled deployment aiming at 99%+ accuracy.                                                                                   |
 
-| Model                                  | Type & Access                               | OCR & Layout Accuracy                                                                                                                                                                   | Fine-Tuning Support                                 | Multilingual & Format Adaptability                                              | Notes                                                                                                                                                                                                                                                                                |
-|----------------------------------------|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **OpenAI GPT-4 Vision**               | Proprietary multimodal LLM (API)            | Excellent OCR; near-human reading on clear text [BLOG.ROBOFLOW.COM](https://blog.roboflow.com). Understands complex layouts (tables, forms) well.                                                                            | No user fine-tuning (closed). Prompt engineering for structure.                  | Yes – strong multilingual (supports major languages). Adapts via prompts to new formats. | Easiest deployment via API. High cost per use. Used with one-shot JSON prompts for ~99% accuracy [LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/).                                                                                                                    |
-| **Google Gemini Pro/Ultra**           | Proprietary multimodal LLM (API)            | State-of-the-art OCR and visual understanding (outperforms previous SOTA in doc tasks [BLOG.ROBOFLOW.COM](https://blog.roboflow.com)). Handles charts, dense text, etc.                                                      | Limited (underlying fine-tuning by Google; custom prompt tuning available).       | Yes – trained on diverse languages; can parse various invoice styles.            | Strong candidate for highest accuracy. On Google Cloud (Vertex AI) [ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com). Some limitations (single-turn, images only) in current version [ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com).                                                                         |
-| **Microsoft Kosmos-2.5**              | Research multimodal model (open weights likely) | Very high OCR accuracy on text-rich images (designed for full document transcription [MICROSOFT.COM](https://www.microsoft.com)). Preserves layout in outputs.                                                                | Yes – designed for supervised fine-tuning on custom tasks [AR5IV.ORG](https://ar5iv.org/). | Likely yes – pre-trained on mixed languages (incl. OCR datasets). Fine-tuning can cover Swiss langs. | Cutting-edge research model from MSR. Not an out-of-box service; requires DIY model setup. Inspires next-gen Azure offerings.                                                                                                                                                        |
-| **AWS Amazon Nova Pro**               | Proprietary multimodal (API via Bedrock)    | Claimed excellent accuracy on financial documents [AWSINSIDER.NET](https://awsinsider.net). (Likely on par with GPT-4V/Gemini for clear invoices.)                                                                             | Not user-tunable (as of 2025). Use prompt templates for JSON, etc.                | Yes – expected to handle multi-language invoices (AWS focuses on enterprise global use). | New entrant (Dec 2024). Integrates with AWS ecosystem (Textract, etc.). Good price-performance on AWS [AWSINSIDER.NET](https://awsinsider.net).                                                                                                                                       |
-| **Salesforce InstructBLIP / BLIP-2 variants** | Open-source vision-language model (e.g. BLIP-2 with FlanT5 or Vicuna) | Good general OCR for printed text; may need tuning for perfect accuracy. Understands images but not specialized for layout by default.                                                                                         | Yes – open for fine-tuning. Can train on labeled invoice data to improve KIE performance. | Partially – base models in English, but can adapt to other Latin languages with data. | Versatile for VQA and captioning. With fine-tuning, can output structured data. LLaVA-NeXT and others in this category have been fine-tuned to JSON extraction [GITHUB.COM](https://github.com/).                                                                                   |
-| **mPLUG-DocOwl2**                     | Open-source doc-specialized MLLM (15B)       | Outstanding multi-page understanding (new SOTA on doc QA benchmarks [ARXIV.ORG](https://arxiv.org/)). OCR-free approach; reads images directly with high fidelity.                                                            | Yes – code and models released for fine-tuning [GITHUB.COM](https://github.com/) [GITHUB.COM](https://github.com/). Requires significant compute. | Original training data likely multilingual (Alibaba’s corpus). Fine-tuning can target specific languages. | Handles long documents by compressing pages efficiently [ARXIV.ORG](https://arxiv.org/) [ARXIV.ORG](https://arxiv.org/). Ideal for large PDFs of invoices. Still under active development (released Dec 2024).                                                                          |
-| **LayoutLMv3**                        | Open-source document Transformer (requires OCR) | Excellent field extraction when OCR is provided. E.g., ~95-98% F1 on invoice benchmarks after fine-tuning. Layout-aware via coordinates [GITHUB.COM](https://github.com/).                                                    | Yes – fine-tune on labeled tokens/fields. Needs OCR text+positions as input.      | Multilingual variant (LayoutXLM) available for non-English. Adapts well if trained on specific formats. | Proven approach for forms and invoices. Two-stage pipeline (OCR then model). Lighter model (~500M params), easier to train.                                                                                                                                                          |
-| **Donut (NAVER)**                     | Open-source end-to-end model (ViT encoder + seq2seq) | Very high on seen layouts. Reported >90% accuracy on receipts like CORD without external OCR [DSPACE.MIT.EDU](https://dspace.mit.edu/). Might drop on unseen noisy data.                                                     | Yes – fine-tune end-to-end on images to text. Requires labeled output strings.     | Pre-trained on English documents; can fine-tune for other languages if provided. | No external OCR needed. Direct JSON generation. Suitable for custom training; a strong candidate for controlled deployment aiming at 99%+ accuracy.                                                                                                                                  |
-
-_Table: Comparison of top vision models for invoice parsing (2025) – including their type, accuracy, adaptability, and notes.  
-[LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)  
-[BLOG.ROBOFLOW.COM](https://blog.roboflow.com)  
-[ARXIV.ORG](https://arxiv.org/)  
-[GITHUB.COM](https://github.com/)_
+_Table: Comparison of top vision models for invoice parsing (2025) – including their type, accuracy, adaptability, and notes. [1], [2], [12], [11]_
 
 ---
 
@@ -298,22 +133,13 @@ _Table: Comparison of top vision models for invoice parsing (2025) – including
 Choosing Fine-Tuning or Prompting depends on your resources and accuracy requirements:
 
 1. **Prompting Large Pre-trained Models (GPT-4V, Gemini, Nova):**  
-   If you prefer not to build your own model, using an API with clever prompts is effective. For instance, prompting GPT-4 Vision with a system message that defines the JSON schema and providing an example can yield structured output with high accuracy  
-   [LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)  
-   [LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)
-   . These models are already very capable across layouts and languages, so for many, a prompt-based approach can reach ~98-99% accuracy on invoices. This is often “no-code”, quicker to implement, and the model updates (improves) over time without your effort. However, to approach 99.99% (virtually zero errors), you might need to incorporate redundancy (e.g., ask the model to double-check values, or run two different models and reconcile differences). Prompting alone might hit a ceiling if the model occasionally misreads a character or swaps two fields – things that fine-tuning could fix by specialization.
+   If you prefer not to build your own model, using an API with clever prompts is effective. For instance, prompting GPT-4 Vision with a system message that defines the JSON schema and providing an example can yield structured output with high accuracy [1][1]. These models are already very capable across layouts and languages, so for many, a prompt-based approach can reach ~98-99% accuracy on invoices. This is often “no-code”, quicker to implement, and the model updates (improves) over time without your effort. However, to approach 99.99% (virtually zero errors), you might need to incorporate redundancy (e.g., ask the model to double-check values, or run two different models and reconcile differences). Prompting alone might hit a ceiling if the model occasionally misreads a character or swaps two fields – things that fine-tuning could fix by specialization.
 
 2. **Fine-Tuning Custom Models (Open-Source or via Cloud Fine-tune):**  
-   Fine-tuning means training a model further on examples of the task. For Swiss invoices, you’d collect a dataset of invoice images with ground-truth annotations (the correct extracted fields). Fine-tuning a model like LayoutLM, Donut, or DocOwl2 on this can boost performance dramatically for that distribution of invoices. As noted, data science teams often surpass off-the-shelf tools by fine-tuning their own models  
-   [GITHUB.COM](https://github.com/)
-   . By fine-tuning, the model learns the specific formats, languages (e.g., Swiss German abbreviations, French terms like "Facture"), and even consistent errors in OCR can be accounted for. This is the path to squeeze out the last fraction of a percent of errors. For example, a fine-tuned LayoutLM might learn that the field “Total (CHF)” is always numeric and at bottom-right; if OCR ever read “SFr” as “5Fr”, the model could correct it from context during classification. Fine-tuning open models is feasible with frameworks like Hugging Face Transformers (there’s even a tutorial to fine-tune Google’s smaller PaLI model to output JSON from receipts  
-   [GITHUB.COM](https://github.com/)
-   ). Cloud providers also start to offer fine-tuning: Google’s GenAI Studio for Gemini (text mode so far), or AWS’s model customization in Bedrock (in preview) could allow tuning these foundation models on your data. Fine-tuning requires effort, but it aligns the model perfectly with your invoices, making 99.99% accuracy an attainable goal – especially if you augment training with lots of synthetic variations of invoices to cover all cases.
+   Fine-tuning means training a model further on examples of the task. For Swiss invoices, you’d collect a dataset of invoice images with ground-truth annotations (the correct extracted fields). Fine-tuning a model like LayoutLM, Donut, or DocOwl2 on this can boost performance dramatically for that distribution of invoices. As noted, data science teams often surpass off-the-shelf tools by fine-tuning their own models [11]. By fine-tuning, the model learns the specific formats, languages (e.g., Swiss German abbreviations, French terms like "Facture"), and even consistent errors in OCR can be accounted for. This is the path to squeeze out the last fraction of a percent of errors. For example, a fine-tuned LayoutLM might learn that the field “Total (CHF)” is always numeric and at bottom-right; if OCR ever read “SFr” as “5Fr”, the model could correct it from context during classification. Fine-tuning open models is feasible with frameworks like Hugging Face Transformers (there’s even a tutorial to fine-tune Google’s smaller PaLI model to output JSON from receipts [11]). Cloud providers also start to offer fine-tuning: Google’s GenAI Studio for Gemini (text mode so far), or AWS’s model customization in Bedrock (in preview) could allow tuning these foundation models on your data. Fine-tuning requires effort, but it aligns the model perfectly with your invoices, making 99.99% accuracy an attainable goal – especially if you augment training with lots of synthetic variations of invoices to cover all cases.
 
 3. **Hybrid Approaches:**  
-   You can combine both strategies. For instance, use a fine-tuned LayoutLM or DiT model for core field extraction (guaranteeing structured output), and then possibly use a GPT-4V as a fallback for any fields that were low confidence or missing. Or use an OCR API (e.g., ABBYY, Tesseract) to get raw text, then use a prompted LLM to map text to fields (a two-step approach). There are also frameworks (like Microsoft’s OmniParser with GPT-4 Vision  
-   [SENSIBLE.SO](https://sensible.so)
-   ) that feed an OCR’s output into GPT-4 for reconciliation – this can yield very high accuracy by leveraging the best of both worlds. The trade-off is complexity vs. raw performance.
+   You can combine both strategies. For instance, use a fine-tuned LayoutLM or DiT model for core field extraction (guaranteeing structured output), and then possibly use a GPT-4V as a fallback for any fields that were low confidence or missing. Or use an OCR API (e.g., ABBYY, Tesseract) to get raw text, then use a prompted LLM to map text to fields (a two-step approach). There are also frameworks (like Microsoft’s OmniParser with GPT-4 Vision [15]) that feed an OCR’s output into GPT-4 for reconciliation – this can yield very high accuracy by leveraging the best of both worlds. The trade-off is complexity vs. raw performance.
 
 ---
 
@@ -321,115 +147,63 @@ Choosing Fine-Tuning or Prompting depends on your resources and accuracy require
 
 To quantify these models’ capabilities, we consider standard document parsing benchmarks and any reported results:
 
-- **Scanned Receipts (SROIE 2019):**  
-  A classic dataset of shop receipts for key info extraction. Prior to multimodal LLMs, the best models (LayoutLMv2 Large) reached ~95-97% F1  
-  [PAPERSWITHCODE.COM](https://paperswithcode.com)
-  . These models had tiny error rates and essentially all fields correct, aside from minor OCR slips. We can infer that GPT-4V and Gemini would also perform at or above this level on SROIE, given their general excellence with receipts (which are simpler than invoices). In specialized tests, GPT-4 Vision scored 6/10 on a tough multi-lingual PDF parse (according to one anecdotal comparison)  
-  [CAUSEOFAKIND.COM](https://causeofakind.com)
-  , but that was likely without domain tuning. With prompt optimization, GPT-4V has been successfully applied to invoices in production scenarios (Azure’s sample shows it working without custom training)  
-  [LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)
-  .
+- **Scanned Receipts (SROIE 2019):** A classic dataset of shop receipts for key info extraction. Prior to multimodal LLMs, the best models (LayoutLMv2 Large) reached ~95-97% F1 [16]. These models had tiny error rates and essentially all fields correct, aside from minor OCR slips. We can infer that GPT-4V and Gemini would also perform at or above this level on SROIE, given their general excellence with receipts (which are simpler than invoices). In specialized tests, GPT-4 Vision scored 6/10 on a tough multi-lingual PDF parse (according to one anecdotal comparison) [17], but that was likely without domain tuning. With prompt optimization, GPT-4V has been successfully applied to invoices in production scenarios (Azure’s sample shows it working without custom training) [1].
 
-- **Invoices (CORD dataset and others):**  
-  CORD (Consortium Invoice Dataset) is a dataset of 1,000 receipts/invoices. Newer models like Donut and LayoutLMv3 achieved over 90% on CORD  
-  [DSPACE.MIT.EDU](https://dspace.mit.edu/)
-  . Fine-tuned models (LayoutLMv3, DocFormer) slightly outperform Donut in some reports  
-  [DORIA.FI](https://doria.fi)
-  . Thus, an invoice-specialized Transformer can hit very high accuracy. We expect open multimodal models fine-tuned on similar data (like DocOwl2) to push this even further, perhaps >99% F1. Alibaba’s DocOwl2 specifically targets multi-page invoices and complex forms; it was shown to outperform previous models on benchmarks – though exact figures aren’t given in the abstract, “new state-of-the-art” implies it exceeded prior SOTA that were in the 90s F1  
-  [ARXIV.ORG](https://arxiv.org/)
-  .
+- **Invoices (CORD dataset and others):** CORD (Consortium Invoice Dataset) is a dataset of 1,000 receipts/invoices. Newer models like Donut and LayoutLMv3 achieved over 90% on CORD [13]. Fine-tuned models (LayoutLMv3, DocFormer) slightly outperform Donut in some reports [18]. Thus, an invoice-specialized Transformer can hit very high accuracy. We expect open multimodal models fine-tuned on similar data (like DocOwl2) to push this even further, perhaps >99% F1. Alibaba’s DocOwl2 specifically targets multi-page invoices and complex forms; it was shown to outperform previous models on benchmarks – though exact figures aren’t given in the abstract, “new state-of-the-art” implies it exceeded prior SOTA that were in the 90s F1 [12].
 
-- **Forms (FUNSD) and Field Extraction:**  
-  FUNSD (form understanding) saw a jump from ~60% to ~90% F1 when moving from BERT to LayoutLM  
-  [GITHUB.COM](https://github.com/)
-  . This is a huge 30-point leap, underscoring how much layout-aware models improve accuracy. It suggests that for forms/invoices, the incorporation of layout in the model is crucial. Models like GPT-4V/Gemini inherently consider layout via vision, and specialized ones like LayoutLM explicitly use coordinates – both approaches drastically reduce extraction errors, especially where text order is non-linear.
+- **Forms (FUNSD) and Field Extraction:** FUNSD (form understanding) saw a jump from ~60% to ~90% F1 when moving from BERT to LayoutLM [11]. This is a huge 30-point leap, underscoring how much layout-aware models improve accuracy. It suggests that for forms/invoices, the incorporation of layout in the model is crucial. Models like GPT-4V/Gemini inherently consider layout via vision, and specialized ones like LayoutLM explicitly use coordinates – both approaches drastically reduce extraction errors, especially where text order is non-linear.
 
-- **DocVQA (Document Visual QA):**  
-  This measures how well models can answer questions about documents (requires reading and reasoning). The best models here recently are large multimodal LLMs. For instance, Microsoft’s paper on LLaVA-Adapter and others shows near human-level scores on DocVQA after fine-tuning an LLM on the task  
-  [GITHUB.COM](https://github.com/)  
-  [GITHUB.COM](https://github.com/)
-  . While this is QA, it implies the model can comprehend documents deeply. A model that excels at DocVQA would have no trouble extracting fields if asked to. In other words, models like Kosmos-2.5, DocOwl2, and Idefics that are built/evaluated on DocVQA and similar tasks have essentially learned to parse documents robustly.
+- **DocVQA (Document Visual QA):** This measures how well models can answer questions about documents (requires reading and reasoning). The best models here recently are large multimodal LLMs. For instance, Microsoft’s paper on LLaVA-Adapter and others shows near human-level scores on DocVQA after fine-tuning an LLM on the task [11][11]. While this is QA, it implies the model can comprehend documents deeply. A model that excels at DocVQA would have no trouble extracting fields if asked to.
 
-- **Multilingual and Currency:**  
-  For Swiss invoices, a concern is handling multiple languages (English, German, French, Italian on the same template). Multilingual document benchmarks (e.g., XFUND for forms in Chinese/Japanese/Spanish, or Kleister NDA for long documents) have seen SOTA results from models like LayoutXLM and LiLT (which extend LayoutLM to multi-language)  
-  [GITHUB.COM](https://github.com/)
-  . These models show that with the right training, even non-Latin scripts can be parsed effectively. Our use-case with Latin scripts is easier; GPT-4V and Gemini should handle these seamlessly (Gemini’s report explicitly tackled multilingual tasks, and PaLI models were trained on multilingual text in images). Also, currency formats (CHF with apostrophes or commas) are just text to the model – a fine-tuned model can learn the locale format. Achieving 99.99% means the model must never confuse “1’234.00” vs “1234.00”, etc. Including varied numeric formats in training data or prompt examples will address this.
+- **Multilingual and Currency:** For Swiss invoices, a concern is handling multiple languages (English, German, French, Italian on the same template). Multilingual document benchmarks (e.g., XFUND for forms in Chinese/Japanese/Spanish, or Kleister NDA for long documents) have seen SOTA results from models like LayoutXLM and LiLT [11]. These models show that with the right training, even non-Latin scripts can be parsed effectively. Our use-case with Latin scripts is easier; GPT-4V and Gemini should handle these seamlessly. Also, currency formats (CHF with apostrophes or commas) are just text to the model – a fine-tuned model can learn the locale format. Achieving 99.99% means the model must never confuse “1’234.00” vs “1234.00”, etc. Including varied numeric formats in training data or prompt examples will address this.
 
-- **Computational Performance:**  
-  Accuracy isn’t the only metric; one must consider speed and cost. OpenAI and Google don’t disclose “accuracy” per se, but they impose limits (image resolution, prompt length). Google’s Gemini boasts a “long context window” for vision  
-  [BLOG.GOOGLE](https://blog.google)
-  , enabling very large multi-page docs to be processed at once – something which can be vital for batch-processing invoices in one go. DocOwl2’s innovation was compressing high-res images to reduce tokens by >50%, greatly improving inference speed for multi-page docs  
-  [ARXIV.ORG](https://arxiv.org/)  
-  [ARXIV.ORG](https://arxiv.org/)
-  . If you need to process thousands of invoices daily, a model that is both accurate and efficient (like DocOwl2 or an optimized API like Nova Pro with batch processing) might be preferable over a slower but slightly more accurate approach.
+- **Computational Performance:** Accuracy isn’t the only metric; one must consider speed and cost. Google’s Gemini boasts a “long context window” for vision [6], enabling very large multi-page docs to be processed at once – something which can be vital for batch-processing invoices in one go. DocOwl2’s innovation was compressing high-res images to reduce tokens by >50%, greatly improving inference speed for multi-page docs [12][12]. If you need to process thousands of invoices daily, a model that is both accurate and efficient (like DocOwl2 or an optimized API like Nova Pro with batch processing) might be preferable over a slower but slightly more accurate approach.
 
-In summary, all these top models are capable of very high accuracy on invoice parsing, often upwards of 95-99% out-of-the-box on benchmarks. With domain adaptation (via fine-tuning or clever prompting), they can push closer to that 99.99% ideal. Minor differences in benchmarks exist: e.g., Gemini Ultra may edge out GPT-4V on certain OCR-heavy tasks  
-[BLOG.ROBOFLOW.COM](https://blog.roboflow.com)
-, while GPT-4V remains a strong generalist with robust performance across the board. Specialized models (LayoutLM, DocOwl2) will dominate on structured extraction metrics when trained on that task, but might be less general. In practice, achieving near-perfect accuracy will likely involve leveraging these models’ strengths and covering their weaknesses (for instance, using validation rules to catch any rare mistakes the model makes).
+In summary, all these top models are capable of very high accuracy on invoice parsing, often upwards of 95-99% out-of-the-box on benchmarks. With domain adaptation (via fine-tuning or clever prompting), they can push closer to that 99.99% ideal. Minor differences in benchmarks exist: e.g., Gemini Ultra may edge out GPT-4V on certain OCR-heavy tasks [2], while GPT-4V remains a strong generalist with robust performance across the board. Specialized models (LayoutLM, DocOwl2) will dominate on structured extraction metrics when trained on that task, but might be less general. In practice, achieving near-perfect accuracy will likely involve leveraging these models’ strengths and covering their weaknesses (for instance, using validation rules to catch any rare mistakes the model makes).
 
 ---
 
 ## Implementation Recommendations for Swiss Invoice Parsing
 
 1. **Selecting the Right Model(s):**  
-   If your priority is maximum accuracy with customization, consider fine-tuning an open-source model like Donut or LayoutLMv3 on your Swiss invoice data. These models have a track record of excellent accuracy in similar tasks and give you full control. A fine-tuned Donut model can directly generate JSON from an invoice image – you would train it by showing many example images with the expected JSON. Given enough examples (a few hundred invoices of each format), it can potentially achieve error rates <0.01%. Similarly, a fine-tuned LayoutLMv3 (with an OCR engine) can reach extremely high F1 on field extraction. Microsoft’s recent DocOwl2 is another top choice if you have the compute – it comes with training code  
-   [GITHUB.COM](https://github.com/)
-   , and fine-tuning it on your data will leverage its powerful backbone for OCR-free parsing. The open models route might involve more initial work, but it ensures the model knows Swiss-specific formats (like the QR-bill section if present, specific language mixes, etc.), leaving very little room for mistakes.
+   If your priority is maximum accuracy with customization, consider fine-tuning an open-source model like Donut or LayoutLMv3 on your Swiss invoice data. These models have a track record of excellent accuracy in similar tasks and give you full control. A fine-tuned Donut model can directly generate JSON from an invoice image – you would train it by showing many example images with the expected JSON. Given enough examples (a few hundred invoices of each format), it can potentially achieve error rates <0.01%. Similarly, a fine-tuned LayoutLMv3 (with an OCR engine) can reach extremely high F1 on field extraction. Microsoft’s recent DocOwl2 is another top choice if you have the compute – it comes with training code [11], and fine-tuning it on your data will leverage its powerful backbone for OCR-free parsing. The open models route might involve more initial work, but it ensures the model knows Swiss-specific formats (like the QR-bill section if present, specific language mixes, etc.), leaving very little room for mistakes.
 
-   If you prefer a managed solution, OpenAI’s GPT-4 Vision or Google’s Gemini Pro are excellent starting points. You can reach ~99% accuracy by prompt engineering alone, as noted. To inch towards 99.99%, you could employ a cascade approach: first, prompt GPT-4V to extract data, then have a second prompt (or an analytical script) verify critical fields. For instance, after extraction, you could ask GPT-4V (or use programmatic checks) “Is the total equal to the sum of line items?” or “Does the invoice date match the due date format for that vendor?”. GPT-4 can answer or adjust, effectively double-checking itself. This kind of validation via LLM can catch rare errors and correct them, boosting reliability. Google’s Gemini, integrated with their Document AI, might also allow combining their OCR (which is very mature) with Gemini’s reasoning – you could use Google Document AI’s structured parser as a baseline and have Gemini cross-verify or fill any gaps.
+   If you prefer a managed solution, OpenAI’s GPT-4 Vision or Google’s Gemini Pro are excellent starting points. You can reach ~99% accuracy by prompt engineering alone, as noted. To inch towards 99.99%, you could employ a cascade approach: first, prompt GPT-4V to extract data, then have a second prompt (or an analytical script) verify critical fields. For instance, after extraction, you could ask GPT-4V “Is the total equal to the sum of line items?” or “Does the invoice date match the due date format for that vendor?” GPT-4 can answer or adjust, effectively double-checking itself. This kind of validation can catch rare errors and correct them, boosting reliability. Google’s Gemini, integrated with their Document AI, might also allow combining their OCR (which is very mature) with Gemini’s reasoning – you could use Google Document AI’s structured parser as a baseline and have Gemini cross-verify or fill any gaps.
 
-   For a hybrid approach within the AWS ecosystem, you could use Amazon Textract to do initial text extraction (Textract is very accurate for printed text, often >99% character accuracy on clear documents), and then feed the text into an LLM (either AWS’s Nova or an open one on SageMaker) to interpret the structure and output final JSON. Textract also detects tables and key-value pairs; its output could guide a prompt for Nova, e.g., “Using the following extracted text (with positions), map them to invoice fields…”. This two-step approach can be more robust than LLM alone, as it decouples OCR from interpretation. Since Textract is trainable to an extent (via its Queries feature in AWS Document AI), you can even ask Textract directly for fields like “InvoiceNumber” and get results. The combination of a traditional parser and an LLM to handle the logic yields a high-precision system with fail-safes.
+   For a hybrid approach within the AWS ecosystem, you could use Amazon Textract to do initial text extraction (Textract is very accurate for printed text, often >99% character accuracy on clear documents), and then feed the text into an LLM (either AWS’s Nova or an open one on SageMaker) to interpret the structure and output final JSON. Textract also detects tables and key-value pairs; its output could guide a prompt for Nova, e.g. “Using the following extracted text (with positions), map them to invoice fields…”. This two-step approach can be more robust than LLM alone, as it decouples OCR from interpretation. Since Textract is trainable to an extent, you can even ask it directly for fields like “InvoiceNumber” and get results. The combination of a traditional parser and an LLM to handle the logic yields a high-precision system with fail-safes.
 
 2. **Achieving 99.99% Accuracy:**  
    Hitting such a lofty accuracy means practically no mistakes allowed. Even a 99.9% accurate model will err on 1 in 1000 fields, which might be too many if you process tens of thousands of fields. Here are strategies to close that last gap:
-
-   - **Ensemble / Redundancy:**  
-     Use multiple models and cross-verify. For example, run both GPT-4 Vision and Gemini on the same invoice. If they agree on a field, high chance it’s correct. If they differ, that flags a potential issue for review. This can be done for critical fields like totals or bank account numbers. Since GPT-4 and Gemini have different architectures, their errors are likely not correlated. An ensemble of strong models can drive error probability to near-zero (the chance they both make the same mistake is extremely low). This, of course, doubles cost and complexity, but for high-stakes data, it’s a consideration.
-
-   - **Human in the Loop for Exceptions:**  
-     If absolute 99.99% is required (perhaps for financial compliance), consider a pipeline where the model does 99% of invoices and any low-confidence predictions are routed to a human verifier. Many modern parsers can provide confidence scores. If the total amount or an IBAN number is parsed with low confidence (or fails a checksum check), a human can quickly verify that one field. This way, the overall system accuracy approaches 100% while still automating the vast majority. Some fine-tuning frameworks even let you encode uncertainty – e.g., output a special token if unsure, to trigger review.
-
-   - **Data Augmentation and Feedback:**  
-     Continuously improve the model by feeding it any errors it makes. If using a fine-tuned model, keep retraining it on new corrected examples (online learning) – this will tighten up performance on edge cases. If using an API like GPT-4, you can’t retrain it, but you can refine your prompts or add more examples to the few-shot context based on error patterns you observe. For instance, if you find GPT-4V sometimes confuses French and German terms, you can include a note in the system message clarifying those, or an example invoice in each language in the prompt.
-
-   - **Leverage Domain Rules:**  
-     Swiss invoices might have some deterministic patterns (e.g., Swiss QR codes encode payment info, or invoice numbers follow a pattern). Incorporate these rules. An AI model might decode a QR code via vision (some can, but not guaranteed), or you can separately decode it using a QR library and then supply that info to the model as additional context (“The QR code says account = XYZ, ensure it matches the parsed IBAN.”). Using known business rules (like VAT is 7.7% in Switzerland – so if the model parsed a VAT amount, you can verify if it’s 7.7% of subtotal within rounding tolerance) can catch subtle arithmetic or reading errors.
+   - **Ensemble / Redundancy:** Use multiple models and cross-verify. For example, run both GPT-4 Vision and Gemini on the same invoice. If they agree on a field, the chance it’s correct is very high. If they differ, that flags a potential issue for review. This can be done for critical fields like totals or bank account numbers.  
+   - **Human in the Loop for Exceptions:** If absolute 99.99% is required (perhaps for financial compliance), consider a pipeline where the model does 99% of invoices and any low-confidence predictions are routed to a human verifier.  
+   - **Data Augmentation and Feedback:** Continuously improve the model by feeding it any errors it makes. If using a fine-tuned model, keep retraining it on new corrected examples.  
+   - **Leverage Domain Rules:** Swiss invoices might have deterministic patterns (e.g., Swiss QR codes, 7.7% VAT). Incorporating rule checks can catch subtle arithmetic or reading errors.
 
 3. **Compute and Integration Considerations:**  
-   If opting for fine-tuning, plan for a training setup. A model like Donut or LayoutLM can be fine-tuned on a single high-end GPU (like an A100) with a few hours of training on ~5k examples. DocOwl2 or large BLIP-based models might need multi-GPU and more memory (15B parameters could need 2+ GPUs even for inference). You could use cloud ML platforms or Hugging Face Hub for training if you don’t have on-premise GPUs. Once fine-tuned, these models can be optimized (through techniques like quantization) to run inference faster and cheaper, possibly even on CPU for moderate loads. Ensure your deployment pipeline can handle image preprocessing (converting PDFs to images or splitting pages, resizing if needed) before feeding to the model.
-
-   API-based models (OpenAI, Google, AWS) require secure integration (you’ll send invoice images to cloud). If privacy is a concern, choose providers with data privacy guarantees or use their on-premise alternatives (Azure OpenAI can run in a private cloud setup, for example). Monitor latency – GPT-4V can be somewhat slow (a few seconds per image), whereas specialized services (like Google’s DocAI or AWS Textract) are faster. If using in real-time workflows, you might need to batch calls or use smaller models.
+   If opting for fine-tuning, plan for a training setup. A model like Donut or LayoutLM can be fine-tuned on a single high-end GPU with a few hours of training on ~5k examples. DocOwl2 or large BLIP-based models might need multi-GPU. Once fine-tuned, these models can be optimized (e.g. quantization) to run inference faster and cheaper. For API-based models (OpenAI, Google, AWS), you must handle data privacy and cost constraints.
 
 4. **Final Recommendation:**  
-   To maximize accuracy for Swiss invoice parsing, a two-pronged approach is ideal: use a fine-tuned document model for core extraction and a large general model for validation and backup. For instance, fine-tune Donut on your invoice data to get a primary parser that is extremely accurate. Then, occasionally sample its output and feed it into GPT-4 (with the invoice image) asking, “Double-check that the extracted data is correct and complete.” GPT-4’s answer can be used to audit the parser. Over time, you might find GPT-4 never corrects the fine-tuned model – indicating you’ve essentially reached parity with the best. At that point, the system can run mostly on the efficient fine-tuned model, with GPT-4/Gemini only as a fallback for edge cases. This setup leverages the custom-tailored precision of fine-tuning and the robust general intelligence of foundation models.
-
-By focusing on high-quality training data, rigorous evaluation, and a combination of the above strategies, achieving near 99.99% parsing accuracy is feasible. Each of the models discussed can play a role: GPT-4V and Gemini for their out-of-the-box prowess, Kosmos-2.5 and DocOwl2 for pushing the envelope with training, and legacy models like LayoutLM for dependable field-specific performance. The key is to align the solution with your needs – if you need a quick win and have a budget, start with GPT-4 or Gemini and prompt engineering; if you need ultimate accuracy and control, invest in fine-tuning a top-tier open model and iteratively refine it. In all cases, keep an eye on the fast-moving landscape: new multimodal models (like possibly GPT-5 Vision or Llama 3 with vision) could emerge, offering even better accuracy or fine-tuning ease, ensuring that the goal of near-perfect invoice parsing becomes increasingly attainable.
+   To maximize accuracy for Swiss invoice parsing, a two-pronged approach is ideal: use a fine-tuned document model for core extraction and a large general model for validation or backup. Over time, you can refine the custom model with new data. This setup leverages the custom-tailored precision of fine-tuning and the robust general intelligence of foundation models. As new multimodal models emerge (e.g., GPT-5 Vision or Llama 3 with vision), re-evaluating performance could further improve results, making near-perfect parsing a reality.
 
 ---
 
 ## References and Sources
 
-- OpenAI. GPT-4 Technical Report, 2023. (Multimodal capabilities overview).  
-- Microsoft Azure Sample – Using GPT-4o for PDF Invoice Extraction (2024) – demonstrates GPT-4 Vision’s prompt-based parsing and high accuracy  
-  [LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)  
-  [LEARN.MICROSOFT.COM](https://learn.microsoft.com/en-us/azure/)
-- Google DeepMind – Gemini Technical Report & Blog (Feb 2024) – details on multimodal performance; Gemini Ultra’s OCR strength  
-  [BLOG.ROBOFLOW.COM](https://blog.roboflow.com)
-- Analytics Vidhya Blog – Building an Image Data Extractor Using Gemini (Dec 2023) – practical invoice parsing with Gemini API, examples of JSON output  
-  [ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)  
-  [ANALYTICSVIDHYA.COM](https://www.analyticsvidhya.com)
-- Microsoft Research – Kosmos-2.5 Paper (Sept 2023) – introduces a spatially-aware multimodal model for documents; emphasizes fine-tuning for text-rich images  
-  [AR5IV.ORG](https://ar5iv.org/)  
-  [MICROSOFT.COM](https://www.microsoft.com)
-- AWS re:Invent 2024 – Amazon Nova Announcement – description of Nova Pro’s capabilities in financial document analysis and integration via Bedrock  
-  [AWSINSIDER.NET](https://awsinsider.net)
-- HuggingFace Blog – Document AI Primer (Nov 2022) – discusses LayoutLMv3, DiT, Donut and their state-of-the-art results on classification, layout analysis, and key info extraction  
-  [GITHUB.COM](https://github.com/)  
-  [GITHUB.COM](https://github.com/)
-- Hu et al. (2024) – mPLUG-DocOwl2 Paper – new SOTA for multi-page document understanding; open-sourced model for fine-tuning  
-  [ARXIV.ORG](https://arxiv.org/)
-- Various benchmarking datasets: SROIE 2019  
-  [AR5IV.ORG](https://ar5iv.org/)
-  , CORD, FUNSD  
-  [GITHUB.COM](https://github.com/)
-  , DocVQA – and model performance as reported in academic and industry sources.
+[1] https://learn.microsoft.com/en-us/azure/  
+[2] https://blog.roboflow.com  
+[3] https://www.analyticsvidhya.com  
+[4] https://clarifai.com  
+[5] https://medium.com  
+[6] https://blog.google  
+[7] https://microsoft.com  
+[8] https://ar5iv.org/  
+[9] https://huggingface.co  
+[10] https://awsinsider.net  
+[11] https://github.com/  
+[12] https://arxiv.org/  
+[13] https://dspace.mit.edu/  
+[14] https://dataloop.ai/  
+[15] https://sensible.so  
+[16] https://paperswithcode.com  
+[17] https://causeofakind.com  
+[18] https://doria.fi
